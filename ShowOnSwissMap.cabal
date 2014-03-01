@@ -1,0 +1,18 @@
+name: ShowOnSwissMap
+version: 0.2.0
+cabal-version: >=1.2
+build-type: Simple
+license: AllRightsReserved
+license-file: ""
+description:  
+author: roland
+data-dir: ""
+ 
+executable ShowOnSwissMap
+    build-depends: base >=4, exif >=3000.0.0, parsec >=3.1.2,
+                   process >=1.1.0.1, swissgeo -any
+    main-is: Main.hs
+    buildable: True
+    hs-source-dirs: src
+    ghc-options: -Wall
+ 
