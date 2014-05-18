@@ -1,5 +1,5 @@
 -- ------------------------------------------------
--- Main program to show the GPS location of an jpg
+-- Main program to show the GPS location of a jpg
 --      image on the Swiss map in the internet browser
 -- 
 --
@@ -27,17 +27,17 @@ import System.Exit(ExitCode)
 main :: IO()
 main = do
   args <- getArgs
-  if (length args) == 1
+  if length args == 1
        then processFile $ head args
-       else putStrLn "give a filename as parameter"
+       else putStrLn "give a single filename as parameter"
 
 debug :: IO()
-debug = processFile "/home/roland/Temp/DSC04847.JPG"
+debug = processFile "/home/roland/Temp/RS4847.JPG"
 
 
 processFile :: String -> IO()
 processFile filename = do
-   exif <- fromFile $ filename
+   exif <- fromFile filename
 
    mbLatt <- getTag exif "InteroperabilityVersion"
    mbLong <- getTag exif "GPSLongitude"
@@ -45,19 +45,22 @@ processFile filename = do
    let eLatt = parse "Lattiude" mbLatt
    let eLong = parse "Longitude" mbLong
 
-   showResult $ lattLong2Sk <$> eLatt <*> eLong
+   let wgs = WGS <$> eLatt <*> eLong
+
+   showResult $ (to03 . wgs2ch) <$> wgs
 
 
 parse :: String -> Maybe String -> Either String Degree
 parse c (Just s)  = getCoord c s
 parse c Nothing = Left $ c ++ " No input"
 
+-- | Mark the point in the official Swiss map 
+getUrl :: CH03 -> String
+getUrl (LV03 x y) = 
+    printf "http://map.geo.admin.ch/?&Y=%d&X=%d&zoom=8&crosshair=bowl" x y
 
-getUrl :: CH1903 -> String
-getUrl (CH long latt) = 
-    printf "http://map.geo.admin.ch/?&Y=%d&X=%d&zoom=8&crosshair=bowl" long latt
-
-showResult :: Either String CH1903 -> IO()
+-- | Show the result on the Swiss map in your browser
+showResult :: Either String CH03 -> IO()
 showResult (Left e) = putStrLn e
 showResult (Right ch) = do
     openBrowserOn (getUrl ch)

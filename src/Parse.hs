@@ -36,6 +36,6 @@ parseCoord = do
     return $ Deg d m s
 
 getCoord :: String -> String -> Either String Degree
-getCoord c s = case (parse parseCoord c s) of
+getCoord c s = case parse parseCoord c s of
     Left e      ->  Left $ show e
     Right coord ->  Right coord
