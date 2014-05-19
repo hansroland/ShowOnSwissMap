@@ -21,7 +21,7 @@ import Data.Geo.Swiss.Conversion
 import Parse
 import Control.Applicative
 import Hledger.Cli.Utils(openBrowserOn)
-import System.Exit(ExitCode)
+-- import System.Exit(ExitCode)
 
 
 main :: IO()
@@ -31,8 +31,8 @@ main = do
        then processFile $ head args
        else putStrLn "give a single filename as parameter"
 
-debug :: IO()
-debug = processFile "/home/roland/Temp/RS4847.JPG"
+-- debug :: IO()
+-- debug = processFile "/home/roland/Temp/RS4847.JPG"
 
 
 processFile :: String -> IO()
@@ -59,7 +59,7 @@ getUrl (LV03 x y) =
 showResult :: Either String CH03 -> IO()
 showResult (Left e) = putStrLn e
 showResult (Right ch) = do
-    openBrowserOn (getUrl ch)
+    _ <-openBrowserOn (getUrl ch)
     return ()
 
 
