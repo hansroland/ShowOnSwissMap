@@ -14,7 +14,7 @@
 --
 
 -- ------------------------------------------------
-import Graphics.Exif
+import Graphics.Hexif
 import System.Environment(getArgs)
 import Text.Printf(printf)
 import Data.Geo.Swiss.Conversion
@@ -38,15 +38,11 @@ debug = processFile "/home/roland/Temp/RS4847.JPG"
 processFile :: String -> IO()
 processFile filename = do
    exif <- fromFile filename
-
-   mbLatt <- getTag exif "InteroperabilityVersion"
-   mbLong <- getTag exif "GPSLongitude"
-
+   let mbLatt = getTag exif TagGPSLatitude
+   let mbLong = getTag exif TagGPSLongitude
    let eLatt = parse "Lattiude" mbLatt
    let eLong = parse "Longitude" mbLong
-
    let wgs = WGS <$> eLatt <*> eLong
-
    showResult $ (to03 . wgs2ch) <$> wgs
 
 
