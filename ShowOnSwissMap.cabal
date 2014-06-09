@@ -1,5 +1,5 @@
 name:                ShowOnSwissMap
-version:             0.2.0
+version:             0.2.0.1
 synopsis:            Show GPS location on Swiss map from a jpg file taken in Switerland
 description:         Show GPS location on Swiss map from a jpg file taken in Switerland
 homepage:            http://www.github.com/hansroland/swissgeo
@@ -15,7 +15,7 @@ cabal-version:       >=1.18
 executable ShowOnSwissMap
     default-language:    Haskell2010
     build-depends: base >=4 && < 5
-                   , hexif >= 0.1 && < 0.2
+                   , hexif >= 0.1 && < 0.3
                    , parsec >=3.1 && < 3.2
                    , process >= 1.1 && < 1.2
                    , hledger >= 0.23 && < 0.24
