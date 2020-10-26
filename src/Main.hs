@@ -1,7 +1,7 @@
 -- ------------------------------------------------
 -- Main program to show the GPS location of a jpg
 --      image on the Swiss map in the internet browser
--- 
+--
 --
 -- Read in a jpg file
 -- read exif data
@@ -20,8 +20,7 @@ import Text.Printf(printf)
 import Data.Geo.Swiss.Conversion
 import Parse
 import Control.Applicative
-import Hledger.Cli.Utils(openBrowserOn)
--- import System.Exit(ExitCode)
+import Web.Browser (openBrowser)
 
 
 main :: IO()
@@ -30,9 +29,6 @@ main = do
   if length args == 1
        then processFile $ head args
        else putStrLn "give a single filename as parameter"
-
--- debug :: IO()
--- debug = processFile "/home/roland/Temp/RS4847.JPG"
 
 
 processFile :: String -> IO()
@@ -50,19 +46,13 @@ parse :: String -> Maybe String -> Either String Degree
 parse c (Just s)  = getCoord c s
 parse c Nothing = Left $ c ++ " No input"
 
--- | Mark the point in the official Swiss map 
+-- | Mark the point in the official Swiss map
 getUrl :: CH03 -> String
-getUrl (LV03 x y) = 
+getUrl (LV03 x y) =
     printf "http://map.geo.admin.ch/?&Y=%d&X=%d&zoom=8&crosshair=bowl" x y
 
 -- | Show the result on the Swiss map in your browser
 showResult :: Either String CH03 -> IO()
 showResult (Left e) = putStrLn e
 showResult (Right ch) = do
-    _ <-openBrowserOn (getUrl ch)
-    return ()
-
-
-
-
-
+    openBrowser (getUrl ch) >>= print
